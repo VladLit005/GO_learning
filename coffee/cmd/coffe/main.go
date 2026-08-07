@@ -9,9 +9,16 @@ import (
 	"strings"
 )
 
-var stock = domain.NewStock()
+const stockFile = "stock.txt"
 
 func main() {
+
+	stock, err := domain.Load(stockFile)
+	if err != nil {
+		stock = domain.NewStock()
+	}
+
+	var machine = domain.NewMachine(stock)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
@@ -40,7 +47,7 @@ func main() {
 
 		case "menu":
 			{
-				for name, recipe := range domain.DefaultRecipes() {
+				for name, recipe := range machine.GetRecipes() {
 					fmt.Printf("%s %d\n", name, recipe.Price)
 				}
 			}
@@ -106,6 +113,60 @@ func main() {
 						}
 					}
 				}
+			}
+
+		case "stats":
+			{
+				orders, revenue := machine.Stats()
+				fmt.Printf("orders = %d revenue = %d\n", orders, revenue)
+			}
+
+		case "brew":
+			{
+				if len(args) < 4 {
+					fmt.Println("usage")
+					os.Exit(2)
+				}
+
+				drink := args[1]
+
+				if args[2] != "--pay" {
+					fmt.Println(domain.ErrInvalidParameters)
+					os.Exit(1)
+				}
+
+				payment, err := strconv.Atoi(args[3])
+				if err != nil {
+					fmt.Println(domain.ErrInvalidParameters)
+					os.Exit(1)
+				}
+
+				steps, err := machine.Brew(drink, payment)
+				if err != nil {
+					fmt.Println(err)
+					os.Exit(1)
+				}
+
+				for i, step := range steps {
+					fmt.Print(step)
+					if i != len(steps)-1 {
+						fmt.Print(" -> ")
+					}
+				}
+				fmt.Println()
+			}
+
+		case "exit":
+			{
+				stock.Save(stockFile)
+				fmt.Println("Bye")
+				os.Exit(0)
+			}
+
+		default:
+			{
+				fmt.Println("usage")
+				os.Exit(2)
 			}
 		}
 	}

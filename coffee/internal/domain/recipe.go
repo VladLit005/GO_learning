@@ -13,7 +13,7 @@ func DefaultRecipes() map[string]Recipe {
 			Name:  "espresso",
 			Price: 150,
 			Ingredients: map[string]int{
-				"bean":  8,
+				"beans": 8,
 				"water": 30,
 			},
 			Steps: []string{
@@ -26,7 +26,7 @@ func DefaultRecipes() map[string]Recipe {
 			Name:  "americano",
 			Price: 180,
 			Ingredients: map[string]int{
-				"bean":  8,
+				"beans": 8,
 				"water": 150,
 			},
 			Steps: []string{
@@ -39,7 +39,7 @@ func DefaultRecipes() map[string]Recipe {
 			Name:  "latte",
 			Price: 220,
 			Ingredients: map[string]int{
-				"bean":  8,
+				"beans": 8,
 				"water": 30,
 				"milk":  150,
 			},
