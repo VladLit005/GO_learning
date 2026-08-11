@@ -1,2 +1,8 @@
 .DS_Store
 .vscode
+.idea
+
+# зависимости/артефакты сборки
+**/node_modules/
+**/build/
+projects/calculator/CalculatorAppBackend/calculator
